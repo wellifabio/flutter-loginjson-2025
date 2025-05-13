@@ -16,6 +16,9 @@ Aplicativo simples com duas telas **Login** e **Home** e autenticação com dado
 - Abra com Android Studio ou VsCode
 - Execute em um navegador web ou emulador
 ```bash
+flutter doctor
+flutter pub get
+flutter pub upgrade
 fletter run
 ```
 
