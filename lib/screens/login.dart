@@ -14,6 +14,7 @@ class LoginState extends State<Login> {
   String email = 'ana@email.com';
   String senha = 'senai123';
   List<dynamic> usuarios = [];
+  bool _senhaVisivel = false;
 
   @override
   void initState() {
@@ -85,9 +86,20 @@ class LoginState extends State<Login> {
             ),
             Text('Senha:'),
             TextField(
+              obscureText: !_senhaVisivel,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Digite sua senha:',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _senhaVisivel ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _senhaVisivel = !_senhaVisivel;
+                    });
+                  },
+                ),
               ),
               onChanged: (text) {
                 senha = text;
