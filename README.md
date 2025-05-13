@@ -26,26 +26,24 @@ fletter run
 - 1 Autentica com um dos usuários do arquivo dados.json
 - assets/dados.json
 ```json
-{
-  "users": [
-    {
-      "id": 1,
-      "nome": "Ana Silva",
-      "email": "ana@email.com",
-      "senha": "senai123"
-    },
-    {
-      "id": 2,
-      "nome": "Marcelo Silva",
-      "email": "marcelo@email.com",
-      "senha": "senai123"
-    },
-    {
-      "id": 3,
-      "nome": "Maria Silva",
-      "email": "maria@email.com",
-      "senha": "senai123"
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "nome": "Ana Silva",
+    "email": "ana@email.com",
+    "senha": "senai123"
+  },
+  {
+    "id": 2,
+    "nome": "Marcelo Silva",
+    "email": "marcelo@email.com",
+    "senha": "senai123"
+  },
+  {
+    "id": 3,
+    "nome": "Maria Silva",
+    "email": "maria@email.com",
+    "senha": "senai123"
+  }
+]
 ```

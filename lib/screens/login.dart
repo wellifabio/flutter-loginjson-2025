@@ -1,7 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:telalogin/data/users_data.dart';
-import 'package:provider/provider.dart';
-
+import 'package:flutter/services.dart';
 import 'home.dart';
 
 class Login extends StatefulWidget {
@@ -12,78 +11,95 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  String email = '';
-  String senha = '';
+  String email = 'ana@email.com';
+  String senha = 'senai123';
+  List<dynamic> usuarios = [];
 
-  validar(context) {
+  @override
+  void initState() {
+    super.initState();
+    carregarUsuarios();
+  }
+
+  // Carrega o JSON dos assets
+  Future<void> carregarUsuarios() async {
+    final String response = await rootBundle.loadString('assets/dados.json');
+    final List<dynamic> data = json.decode(response);
     setState(() {
-      if (email == 'aluno@email.com' && senha == 'senha123') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Home(title: 'Home')),
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Erro"),
-              content: Text("Email ou senha inválidos"),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: Text("Fechar"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      }
+      usuarios = data;
     });
+  }
+
+  void validar(BuildContext context) {
+    final usuarioValido = usuarios.firstWhere(
+      (user) => user['email'] == email && user['senha'] == senha,
+      orElse: () => null,
+    );
+
+    if (usuarioValido != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(title: 'Home ${usuarioValido['nome']}'),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Erro"),
+            content: Text("Email ou senha inválidos"),
+            actions: [
+              ElevatedButton(
+                child: Text("Fechar"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title.toString()),
-          backgroundColor: Colors.blueGrey,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('E-mail:'),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Digite seu e-mail:',
-                ),
-                onChanged: (text) {
-                  email = text;
-                },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title.toString()),
+        backgroundColor: Colors.blueGrey,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text('E-mail:'),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Digite seu e-mail:',
               ),
-              Text('Senha:'),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Digite sua senha:',
-                ),
-                onChanged: (text) {
-                  senha = text;
-                },
+              onChanged: (text) {
+                email = text;
+              },
+            ),
+            Text('Senha:'),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Digite sua senha:',
               ),
-              ElevatedButton(
-                onPressed: () {
-                  validar(context);
-                },
-                child: Text('Entrar'),
-              ),
-            ],
-          ),
+              onChanged: (text) {
+                senha = text;
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                validar(context);
+              },
+              child: Text('Entrar'),
+            ),
+          ],
         ),
       ),
     );
